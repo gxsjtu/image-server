@@ -10,7 +10,6 @@ const junk = require('junk');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    test();
     res.json({result: 'success'});
 });
 
@@ -28,7 +27,6 @@ router.get('/getADImage',function(req, res, next){
     if (err) {
       res.json({result: 'error'});
     } else {
-      var res = [];
       var maxName = 0;//记录最大图片的名字
       var imgFileName;//防止图片后缀不同 所以存储起来
       _.forEach(files.filter(junk.not), x => {
@@ -39,17 +37,12 @@ router.get('/getADImage',function(req, res, next){
           imgFileName = x;
         }
       })
-      // console.log(imgFileName);
-      var imgBuf = fs.readFileSync(__dirname + '/..' + '/public/ads/' + imgFileName);
-      var imgBase = imgBuf.toString("base64");
-      // console.log(imgBase);
-      res.json({result: 'ok', imgData: imgBase});
+      // var imgBuf = fs.readFileSync(__dirname + '/..' + '/public/ads/' + imgFileName);
+      // var imgBase = imgBuf.toString("base64");
+      // res.json({result: 'ok', imgData: imgBase});
+      res.json({result: 'ok', imgName: imgFileName});
     }
   })
 })
-
-function test(){
-
-}
 
 module.exports = router;
