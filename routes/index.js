@@ -37,10 +37,10 @@ router.get('/getADImage',function(req, res, next){
           imgFileName = x;
         }
       })
-      // var imgBuf = fs.readFileSync(__dirname + '/..' + '/public/ads/' + imgFileName);
-      // var imgBase = imgBuf.toString("base64");
-      // res.json({result: 'ok', imgData: imgBase});
-      res.json({result: 'ok', imgName: imgFileName});
+      var imgBuf = fs.readFileSync(__dirname + '/..' + '/public/ads/' + imgFileName);
+      var imgBase = imgBuf.toString("base64");
+      res.json({result: 'ok', imgData: imgBase});
+      // res.json({result: 'ok', imgName: imgFileName});
     }
   })
 })
