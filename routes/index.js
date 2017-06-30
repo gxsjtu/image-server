@@ -21,26 +21,33 @@ router.post('/upload', upload.single('file'), (req, res, next) => {
     })
 })
 
-router.get('/getADImage',function(req, res, next){
+router.get('/getADImage/:imgName',function(req, res, next){
+  var oldName = req.params.imgName;
   var path = __dirname + '/..' + '/public/ads';
   fs.readdir(path, (err, files) => {
     if (err) {
       res.json({result: 'error'});
     } else {
       var maxName = 0;//记录最大图片的名字
-      // var imgFileName;//防止图片后缀不同 所以存储起来
       _.forEach(files.filter(junk.not), x => {
-        // var index = x.lastIndexOf('.');
-        var imgName = parseInt(x);
-        if(imgName > maxName){
+        let imgName = parseInt(x);
+        if(imgName > parseInt(maxName)){
           maxName = imgName;
-          // imgFileName = x;
         }
       })
-      var imgBuf = fs.readFileSync(__dirname + '/..' + '/public/ads/' + maxName);
-      var imgBase = imgBuf.toString("base64");
-      res.json({result: 'ok', imgData: imgBase});
-      // res.json({result: 'ok', imgName: imgFileName});
+
+      if(parseInt(maxName) > parseInt(oldName)){
+        fs.readFile(__dirname + '/..' + '/public/ads/' + maxName, (err, data) => {
+          if(err) {
+              res.json({result: 'error'});
+          }else{
+            var imgBase = data.toString("base64");
+            res.json({result: 'ok', imgData: imgBase, imgName: maxName});
+          }
+        });
+      }else{
+        res.json({result: 'no'});
+      }
     }
   })
 })
