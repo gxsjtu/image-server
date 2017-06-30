@@ -28,16 +28,16 @@ router.get('/getADImage',function(req, res, next){
       res.json({result: 'error'});
     } else {
       var maxName = 0;//记录最大图片的名字
-      var imgFileName;//防止图片后缀不同 所以存储起来
+      // var imgFileName;//防止图片后缀不同 所以存储起来
       _.forEach(files.filter(junk.not), x => {
-        var index = x.lastIndexOf('.');
-        var imgName = parseInt(x.substring(0,index + 1));
+        // var index = x.lastIndexOf('.');
+        var imgName = parseInt(x);
         if(imgName > maxName){
           maxName = imgName;
-          imgFileName = x;
+          // imgFileName = x;
         }
       })
-      var imgBuf = fs.readFileSync(__dirname + '/..' + '/public/ads/' + imgFileName);
+      var imgBuf = fs.readFileSync(__dirname + '/..' + '/public/ads/' + maxName);
       var imgBase = imgBuf.toString("base64");
       res.json({result: 'ok', imgData: imgBase});
       // res.json({result: 'ok', imgName: imgFileName});
