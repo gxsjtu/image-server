@@ -32,6 +32,7 @@ router.post('/upload', upload.single('file'), (req, res, next) => {
 
 router.get('/getADImage/:imgName',function(req, res, next){
   var oldName = req.params.imgName;
+  var nameList = [];
   var path = __dirname + '/..' + '/public/ads';
   fs.readdir(path, (err, files) => {
     if (err) {
@@ -39,28 +40,42 @@ router.get('/getADImage/:imgName',function(req, res, next){
         result: 'error'
       });
     } else {
-      var maxName = 0;//记录最大图片的名字
+      // var maxName = 0;//记录最大图片的名字
       _.forEach(files.filter(junk.not), x => {
         let imgName = parseInt(x);
-        if(imgName > parseInt(maxName)){
-          maxName = imgName;
+        if(imgName > oldName){
+          nameList.push(imgName);
         }
       })
 
-      if(parseInt(maxName) > parseInt(oldName)){
-        fs.readFile(__dirname + '/..' + '/public/ads/' + maxName, (err, data) => {
-          if(err) {
-              res.json({result: 'error'});
-          }else{
-            var imgBase = data.toString("base64");
-            res.json({result: 'ok', imgData: imgBase, imgName: maxName});
-          }
-        });
+      var methodList = [];
+      if(nameList.length > 0){
+        _.forEach(nameList, (name) => {
+          methodList.push(getImgRes(name));
+        })
+        Promise.all(methodList).then(datas => {
+          res.json({result: 'ok', imgDatas: datas});
+        }).catch(err => {
+          res.json({result: "error"});
+        })
       }else{
         res.json({result: 'no'});
       }
     }
   })
 })
+
+function getImgRes(name){
+  return new Promise((resolve, reject) => {
+    fs.readFile(__dirname + '/..' + '/public/ads/' + name, (err, data) => {
+      if(err) {
+          reject(err);
+      }else{
+        var imgBase = data.toString("base64");
+        resolve({imgData: imgBase, imgName: name});
+      }
+    });
+  })
+}
 
 module.exports = router;
