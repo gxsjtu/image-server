@@ -50,11 +50,15 @@ router.get('/getADImage/:imgName',function(req, res, next){
 
       var methodList = [];
       if(nameList.length > 0){
+        // res.json({result: 'ok', imgNames: nameList});
         _.forEach(nameList, (name) => {
           methodList.push(getImgRes(name));
         })
         Promise.all(methodList).then(datas => {
-          res.json({result: 'ok', imgDatas: datas});
+          var resData = _.sortBy(datas, (d) => {
+            return d.imgName;
+          })
+          res.json({result: 'ok', imgDatas: resData});
         }).catch(err => {
           res.json({result: "error"});
         })
