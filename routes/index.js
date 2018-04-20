@@ -91,32 +91,11 @@ router.post('/submitSuggestion',function(req, res, next){
     var mobile = req.body.mobile;
     var description = req.body.description;
     var userSvc = new UserSvc();
-
     userSvc.submitSuggestion(account, mobile, description).then(d => {
         res.json(new Result(Errors.Success));
     }).catch(err => {
         res.json(new Result(Errors.SystemFailed, err));
     });
 })
-
-//提交物流信息
-router.post('/submitTransport',function(req, res, next){
-    var account = req.body.account;
-    var mobile = req.body.mobile;
-    var province = req.body.province;
-    var city = req.body.city;
-    var address = req.body.address;
-    var sType = req.body.sType;
-    var description = req.body.description;
-    var userSvc = new UserSvc();
-
-    userSvc.submitSuggestion(account, mobile,province,city,address,sType, description).then(d => {
-        res.json(new Result(Errors.Success));
-    }).catch(err => {
-        res.json(new Result(Errors.SystemFailed, err));
-    });
-})
-
-
 
 module.exports = router;
