@@ -47,5 +47,45 @@ UserSvc.prototype.submitSuggestion = function(account, mobile, description) {
   });
 };
 
+//提交车找货  货找车信息
+UserSvc.prototype.submitTransport = function(account, mobile,province,city,address,sType, description) {
+  return new Promise((resolve, reject) => {
+    account = this.trim(account);
+    if ( account == '' )
+     return reject();
+
+    mobile = this.trim(mobile);
+    if ( mobile=='' || (description.length < 2) )
+      return reject();
+    else
+    {
+    User.findOneAndUpdate({
+        account: account
+      }, {
+        updated:moment().format('YYYY-MM-DD HH:mm:ss'),
+        description: description,
+        '$push': {
+          'transport': {
+            created:moment().format('YYYY-MM-DD HH:mm:ss'),
+            mobile:mobile,
+            province:province,
+            city:city,
+            address:address,
+            description:description,
+            sType:sType
+          }
+        }
+      }, {
+        new: false,
+        upsert: true
+      }).then((d) => {
+        return resolve(1);
+      }).catch(err => {
+        return reject(err);
+      });
+    }
+  });
+};
+
 
 module.exports = UserSvc;
