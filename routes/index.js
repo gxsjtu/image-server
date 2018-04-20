@@ -10,10 +10,6 @@ const fs = require('fs');
 const _ = require('lodash');
 const junk = require('junk');
 
-var Errors = require('../services/errors');
-const UserSvc = require('../services/userSvc.js');
-var Result = require('../services/Result');
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.json({
@@ -85,17 +81,5 @@ function getImgRes(name){
     });
   })
 }
-
-router.post('/submitSuggestion',function(req, res, next){
-    var account = req.body.account;
-    var mobile = req.body.mobile;
-    var description = req.body.description;
-    var userSvc = new UserSvc();
-    userSvc.submitSuggestion(account, mobile, description).then(d => {
-        res.json(new Result(Errors.Success));
-    }).catch(err => {
-        res.json(new Result(Errors.SystemFailed, err));
-    });
-})
 
 module.exports = router;
