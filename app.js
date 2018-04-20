@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors')
 var index = require('./routes/index');
+var db = require('./services/db');
 var app = express();
 app.use(cors());
 
