@@ -17,12 +17,14 @@ var userSchema = new Schema({
   }],
   transport:[{
     mobile: String,
-    province: String,
-    city: String,
-    address: String,
     description: String,
     created: String,
-    sType: Number
+    sType: Number,
+    fromProvince: String,
+    fromCity: String,
+    toProvince: String,
+    toCity: String,
+    contact: String
   }]
 
 }, {
