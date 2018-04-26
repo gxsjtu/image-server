@@ -56,7 +56,7 @@ UserSvc.prototype.submitTransport = function(account, mobile,sType, description,
      return reject();
 
     mobile = this.trim(mobile);
-    if ( mobile=='' || (description.length < 2) )
+    if ( mobile=='' )
       return reject();
     else
     {
